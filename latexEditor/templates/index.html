@@ -1,0 +1,44 @@
+<html>
+    <head>
+        {{ codemirror.include_codemirror() }}
+    </head>
+    <body>
+      <table class="action" border = "1" width=100%>
+          <tr>
+              <td width=50%><center>
+                <button type="submit"  name="compile" value="compile"
+                    class="compile" form="textIn" >Compile</button>
+              </center></td>
+              <td>
+                <img src="{{url_for('static', filename='cwo_960_720.png')}}"
+                 alt="my image" height=20% style='float:right'>
+               </td>
+          </tr>
+     </table>
+     <div id=workspace style="width:100%">
+        <div id=inputs style="width:50%; float:left">
+            <table border="1" float='left' width=100%>
+              <form method="POST" id=textIn>
+                <tr><td>
+                  <center><h2> Head </h2></center><hr>
+                  <div>{{ form.header }}</div>
+                </tr></td>
+                <tr><td>
+                  <center><h2> Body </h2></center><hr>
+                  {{ form.body }}
+                </tr></td>
+                <tr><td>
+                  <center><h2> Files </h2></center><hr>
+                  {{ form.files }}
+                </tr></td>
+              </form>
+            </table>
+          </div>
+          <div id=output style="width:50%; float:right">
+            <table border = "1" style="width:100%;height:650px;">
+              <tr><td><embed src="{{url_for('static', filename='fOut.pdf')}}" alt="my pdf" width=100% height=100%></tr></td>
+            </table>
+          </div>
+        </div>
+    </body>
+</html>
