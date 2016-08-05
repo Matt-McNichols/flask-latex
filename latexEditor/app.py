@@ -1,46 +1,65 @@
 from flask import Flask, render_template, request
+from flask_sqlalchemy import SQLAlchemy
 from flask_codemirror import CodeMirror
 from flask_wtf import Form
 from flask_codemirror.fields import CodeMirrorField
 from wtforms.fields import SubmitField
-from latexEditor.setup import app,default_body
 import os, subprocess
 
 
+# Initialize app
+app = Flask(__name__)
+app.config.update(
+    SECRET_KEY = 'secret!',
+    # mandatory
+    CODEMIRROR_LANGUAGES = [ 'htmlembedded','python','stex'],
+    # optional
+    CODEMIRROR_THEME = '3024-day',
+    CODEMIRROR_ADDONS = (('display','placeholder'),),
+    SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/test.db'
+);
+# Initialize database
+db = SQLAlchemy(app)
+# Initialize codemirror
+codemirror = CodeMirror(app)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 class textForm(Form):
     header = CodeMirrorField(language='stex',config={'lineNumbers':'true','lineWrapping':'true'} )
     body = CodeMirrorField(language='stex',config={'lineNumbers' : 'true','lineWrapping':'true'})
     files = CodeMirrorField(language='none',config={'lineNumbers' : 'false','lineWrapping':'true'})
     submit = SubmitField('Submit')
 
+class textIn(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    header = db.Column(db.Text())
+
+    def __init__(self, name, header):
+        self.name = name
+        self.header = header
+
+    def __repr__(self):
+        return '<db Model name: %r>' % self.name
+
 @app.route("/",methods = ['GET', 'POST'])
 def index():
     print 'start of index'
     form = textForm()
     if request.method == 'POST':
-        texSave(form);
-    form.header.data = texGet();
-    form.body.data = default_body;
+        print 'method is a POST'
+        # update model if it exists
+        textModel = textIn.query.filter_by(name='test').first();
+        print 'textModel'
+        #textModel.update({'header': 'updated header'})
+        #form.header.data = textModel.header;
+        #print 'added the text Model'
+    #if request.method == 'POST':
+    #form.body.data = default_body;
     if form.validate_on_submit():
         print 'form was validated'
     #texCompile(form)
     return render_template('index.html', form=form)
-
-def texSave(Obj):
-    ''' save text fields to a local file'''
-    headName = os.path.join(BASE_DIR,'latexEditor/static/headFile.txt')
-    headFile = open(headName,'w')
-    headFile.write(Obj.header.data)
-
-def texGet():
-    ''' returns the text fields from local file'''
-    headName = os.path.join(BASE_DIR,'latexEditor/static/headFile.txt')
-    headFile = open(headName,'r')
-    headText = headFile.read();
-    print headText
-    return headText
-
 
 def texCompile(Obj):
     inTag   = '~I~{'
@@ -84,3 +103,10 @@ def texCompile(Obj):
     os.system('pdflatex fOut.tex')
     os.chdir('../../');
     os.system('pwd')
+
+if __name__=='__main__':
+    db.drop_all()
+    db.create_all()
+    db.session.add(textIn('test','initial header'))
+    db.session.commit()
+    app.run(debug=True)
