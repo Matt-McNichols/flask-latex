@@ -4,6 +4,7 @@ from flask_codemirror import CodeMirror
 from flask_wtf import Form
 from flask_codemirror.fields import CodeMirrorField
 from wtforms.fields import SubmitField
+from initFields import default_head
 import os, subprocess
 
 
@@ -41,25 +42,6 @@ class textIn(db.Model):
 
     def __repr__(self):
         return '<db Model name: %r>' % self.name
-
-@app.route("/",methods = ['GET', 'POST'])
-def index():
-    print 'start of index'
-    form = textForm()
-    if request.method == 'POST':
-        print 'method is a POST'
-        # update model if it exists
-        textModel = textIn.query.filter_by(name='test').first();
-        print 'textModel'
-        #textModel.update({'header': 'updated header'})
-        #form.header.data = textModel.header;
-        #print 'added the text Model'
-    #if request.method == 'POST':
-    #form.body.data = default_body;
-    if form.validate_on_submit():
-        print 'form was validated'
-    #texCompile(form)
-    return render_template('index.html', form=form)
 
 def texCompile(Obj):
     inTag   = '~I~{'
@@ -103,10 +85,32 @@ def texCompile(Obj):
     os.system('pdflatex fOut.tex')
     os.chdir('../../');
     os.system('pwd')
+# ...
+
+@app.route("/",methods = ['GET', 'POST'])
+def index():
+    print 'start of index'
+    form = textForm()
+    textModel = textIn.query.filter_by(name='test').first();
+    if request.method == 'POST':
+        print 'method is a POST'
+        # update model if it exists
+        print 'before: ',textModel.header
+        textModel.header = form.header.data 
+        print 'after: ',textModel.header
+        db.session.commit()
+    else:
+        print 'method is a GET'
+        form.header.data = textModel.header
+    #if form.validate_on_submit():
+    #    print 'form was validated'
+    #texCompile(form)
+    return render_template('index.html', form=form)
+
 
 if __name__=='__main__':
     db.drop_all()
     db.create_all()
-    db.session.add(textIn('test','initial header'))
+    db.session.add(textIn('test',default_head))
     db.session.commit()
-    app.run(debug=True)
+    app.run(host='0.0.0.0',port=5950,debug=True)
