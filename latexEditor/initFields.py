@@ -88,9 +88,6 @@ there should be two lines between block listings\\
 ~O~{testFile}
 \section{Number Two Test}
 here is some text before the number two file\\
-~I~{secondFile}
-the output of the second file will be below\\
-~O~{secondFile}
-this is some text under the output of the second file
 \\end{document}
 '''
+default_file = 'testFile::/home/ubuntu/mattGitHub/flask-latex/latexEditor/static/testFile.py'
