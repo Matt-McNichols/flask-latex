@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.8.11)  11 AUG 2016 18:29
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.8.11)  12 AUG 2016 19:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**fOut.tex
-(./fOut.tex
+**texDoc.tex
+(./texDoc.tex
 LaTeX2e <2011/06/27>
 Babel <3.9h> and hyphenation patterns for 78 languages loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/report.cls
@@ -363,8 +363,8 @@ Package hyperref Info: Option `colorlinks' set `true' on input line 18.
 
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2013/08/26 1.5b listings language file
-) (./fOut.aux)
-\openout1 = `fOut.aux'.
+) (./texDoc.aux)
+\openout1 = `texDoc.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
 LaTeX Font Info:    ... okay on input line 41.
@@ -443,9 +443,9 @@ LaTeX Info: Redefining \ref on input line 41.
 LaTeX Info: Redefining \pageref on input line 41.
 LaTeX Info: Redefining \nameref on input line 41.
 
-(./fOut.out) (./fOut.out)
+(./texDoc.out) (./texDoc.out)
 \@outlinefile=\write3
-\openout3 = `fOut.out'.
+\openout3 = `texDoc.out'.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
@@ -470,9 +470,9 @@ Package caption Info: End \AtBeginDocument code.
 
 [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./fOut.toc)
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./texDoc.toc)
 \tf@toc=\write4
-\openout4 = `fOut.toc'.
+\openout4 = `texDoc.toc'.
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
@@ -495,27 +495,27 @@ Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
 nput line 83.
 
 (/home/matt/mattGitHub/flask-latex/latexEditor/static/testFile.py)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 94.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 93.
  [2
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 94.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 93.
 
-(./fOut.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 94.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 94.
-Package rerunfilecheck Info: File `fOut.out' has not changed.
+(./texDoc.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 93.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 93.
+Package rerunfilecheck Info: File `texDoc.out' has not changed.
 (rerunfilecheck)             Checksum: C45131CEBAE33C5E4942F3FB224CF893;219.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 94.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 93.
  ) 
 Here is how much of TeX's memory you used:
  9665 strings out of 493304
- 144204 string characters out of 6139871
+ 144234 string characters out of 6139871
  300032 words of memory out of 5000000
  13002 multiletter control sequences out of 15000+600000
  10394 words of font info for 38 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 42i,6n,47p,264b,1117s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,6n,47p,266b,1117s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texl
@@ -524,7 +524,7 @@ mf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist
 /fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/
 type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
 public/amsfonts/cm/cmtt9.pfb>
-Output written on fOut.pdf (3 pages, 90916 bytes).
+Output written on texDoc.pdf (3 pages, 90877 bytes).
 PDF statistics:
  92 PDF objects out of 1000 (max. 8388607)
  78 compressed objects within 1 object stream

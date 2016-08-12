@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_codemirror import CodeMirror
 from flask_wtf import Form
@@ -17,7 +17,8 @@ app.config.update(
     # optional
     CODEMIRROR_THEME = '3024-day',
     CODEMIRROR_ADDONS = (('display','placeholder'),),
-    SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/test.db'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/test.db',
+    SEND_FILE_MAX_AGE_DEFAULT = 0,
 );
 # Initialize database
 db = SQLAlchemy(app)
@@ -53,66 +54,71 @@ def texCompile(Obj):
     replTag = '\lstinputlisting{'
 
     # orginize file paths with their id's
+    # each line contains an id and a path to a file
     tempArray = Obj.files.data.splitlines()
     pathArray = []
-    # each line contains an id and a path to a file
     for line in tempArray:
         temp = line.split('::')
         pathArray.append(temp)
 
+    # make all str replacements
+    texBody = Obj.body.data;
     for tag,filePath in pathArray:
         tag = str(tag); filePath = str(filePath);
-        # run the files code and store it in an output file
         fileOutput = subprocess.check_output(['python',filePath])
-
-        # make all str replacements
         outLine = outTag + tag + '}'
         outRepl = '\\begin{lstlisting}\n' + fileOutput + '\n\\end{lstlisting}\n'
-        print 'outLine',outLine
-        print 'outRepl',outRepl
-        # replace output tag blocks with file output
-        Obj.body.data=Obj.body.data.replace(outLine,outRepl)
-        # replace input tag with filePath
-        Obj.body.data=Obj.body.data.replace(tag,filePath)
-        # replace input block with lstinputlisting
-        Obj.body.data=Obj.body.data.replace(inTag,replTag)
-    print 'obj.body after str rep: ',Obj.body.data
+        texBody=texBody.replace(outLine,outRepl)
+        texBody=texBody.replace(tag,filePath)
+        texBody=texBody.replace(inTag,replTag)
+
     # put blocks together into a file
-    fTexName = os.path.join(BASE_DIR,'latexEditor/static/fOut.tex')
-    print 'tex file location: ',fTexName
+    # remove old file if it exists
+    fTexName = os.path.join(BASE_DIR,'latexEditor/static/texDoc.tex')
+    os.system('rm static/texDoc.tex')
     fTex = open(fTexName,'w')
     fTex.write(Obj.header.data)
-    fTex.write(Obj.body.data)
+    fTex.write(texBody)
     fTex.close()
+
     # now compile tex file into pdf
     os.chdir('static/');
-    os.system('pdflatex fOut.tex')
+    os.system('pdflatex texDoc.tex')
     os.chdir('../');
     os.system('pwd')
 # ...
 
-@app.route("/",methods = ['GET', 'POST'])
+
+
+# TODO: issue loading the static pdf file every time it changes
+# NOTE: to make stable remove the extra_files arg
+@app.route("/texEditor/",methods = ['GET', 'POST'])
 def index():
-    print 'start of index'
     form = textForm()
     textModel = textIn.query.filter_by(name='test').first();
+
     if request.method == 'POST':
-        print 'method is a POST'
-        # update model if it exists
+        print 'method was a POST'
         textModel.header = form.header.data 
         textModel.body = form.body.data 
         textModel.files = form.files.data
         db.session.commit()
+        texCompile(form)
+        return redirect(url_for('index'))
     else:
-        print 'method is a GET'
+        print 'method was a GET'
         form.header.data = textModel.header
         form.body.data = textModel.body
         form.files.data = textModel.files
-    #if form.validate_on_submit():
-    #    print 'form was validated'
-    texCompile(form)
+    #texCompile(form)
     return render_template('index.html', form=form)
 
+@app.after_request
+def add_header(response):
+    if 'Cache-Control' not in response.headers:
+        print 'setting chache control'
+        response.headers['Cache-Control']='no-store'
+    return response
 
 if __name__=='__main__':
     db.drop_all()

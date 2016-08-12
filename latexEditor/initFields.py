@@ -90,4 +90,4 @@ there should be two lines between block listings\\
 here is some text before the number two file\\
 \\end{document}
 '''
-default_file = 'testFile::/home/ubuntu/mattGitHub/flask-latex/latexEditor/static/testFile.py'
+default_file = 'testFile::/home/matt/mattGitHub/flask-latex/latexEditor/static/testFile.py'
