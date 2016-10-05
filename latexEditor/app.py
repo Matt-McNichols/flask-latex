@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_codemirror import CodeMirror
 from flask_wtf import Form
 from flask_codemirror.fields import CodeMirrorField
+from flask_bootstrap import Bootstrap
 from wtforms.fields import SubmitField
 from initFields import default_head, default_body,default_file
 import os, subprocess
@@ -24,6 +25,7 @@ app.config.update(
 db = SQLAlchemy(app)
 # Initialize codemirror
 codemirror = CodeMirror(app)
+Bootstrap(app)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 class textForm(Form):
@@ -89,6 +91,9 @@ def texCompile(Obj):
 # ...
 
 
+@app.route("/bs/")
+def bs():
+    return render_template('bs/blog/index.html')
 
 # TODO: issue loading the static pdf file every time it changes
 # NOTE: to make stable remove the extra_files arg
@@ -111,7 +116,7 @@ def index():
         form.body.data = textModel.body
         form.files.data = textModel.files
     #texCompile(form)
-    return render_template('index.html', form=form)
+    return render_template('texEditor.html', form=form)
 
 @app.after_request
 def add_header(response):
